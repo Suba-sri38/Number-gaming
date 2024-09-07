@@ -1,0 +1,78 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class GuessingGame {
+
+    
+    public static boolean playRound(int maxAttempts) {
+        Random rand = new Random();
+        int number = rand.nextInt(100) + 1; // Generates a random number between 1 and 100
+        Scanner scanner = new Scanner(System.in);
+        int attempts = 0;
+        boolean hasWon = false;
+
+        System.out.println("A random number between 1 and 100 has been generated!");
+
+        while (attempts < maxAttempts) {
+            System.out.print("Attempt " + (attempts + 1) + "/" + maxAttempts + ": Enter your guess: ");
+            int guess = scanner.nextInt();
+            attempts++;
+
+            if (guess == number) {
+                System.out.println("Congratulations! You guessed the correct number " + number + " in " + attempts + " attempts.");
+                hasWon = true;
+                break;
+            } else if (guess < number) {
+                System.out.println("Too low! Try again.");
+            } else {
+                System.out.println("Too high! Try again.");
+            }
+        }
+
+        if (!hasWon) {
+            System.out.println("Sorry! You've used all " + maxAttempts + " attempts. The correct number was " + number + ".");
+        }
+
+        return hasWon;
+    }
+
+    // Main function to handle multiple rounds and scoring
+    public static void guessingGame(int totalRounds, int maxAttempts) {
+        Scanner scanner = new Scanner(System.in);
+        int score = 0;
+
+        for (int round = 1; round <= totalRounds; round++) {
+            System.out.println("\n--- Round " + round + "/" + totalRounds + " ---");
+            boolean won = playRound(maxAttempts);
+
+            if (won) {
+                score += maxAttempts; // Adding score for winning the round
+            }
+
+            if (round < totalRounds) {
+                System.out.print("Do you want to play the next round? (yes/no): ");
+                String playNextRound = scanner.next();
+
+                if (playNextRound.equalsIgnoreCase("no")) {
+                    break;
+                }
+            }
+        }
+
+        System.out.println("\nGame Over! Your final score is: " + score);
+    }
+
+    // Main method to start the game
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of rounds you want to play: ");
+        int rounds = scanner.nextInt();
+
+        System.out.print("Enter the maximum number of attempts per round: ");
+        int maxAttempts = scanner.nextInt();
+
+        guessingGame(rounds, maxAttempts);
+    }
+}
+
